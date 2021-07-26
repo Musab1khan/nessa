@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include nessa *.css
+recursive-include nessa *.csv
+recursive-include nessa *.html
+recursive-include nessa *.ico
+recursive-include nessa *.js
+recursive-include nessa *.json
+recursive-include nessa *.md
+recursive-include nessa *.png
+recursive-include nessa *.py
+recursive-include nessa *.svg
+recursive-include nessa *.txt
+recursive-exclude nessa *.pyc
