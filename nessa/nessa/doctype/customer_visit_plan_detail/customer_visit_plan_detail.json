@@ -1,0 +1,105 @@
+{
+ "creation": "2021-06-26 09:28:48.536361",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "customer_name",
+  "contact",
+  "plan_date",
+  "cb_1",
+  "sales_partner",
+  "customer_visit_reference_cf",
+  "status",
+  "from_time",
+  "to_time"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "contact",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Contact",
+   "options": "Contact"
+  },
+  {
+   "columns": 1,
+   "fieldname": "plan_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Plan Date",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Open\nCompleted"
+  },
+  {
+   "columns": 2,
+   "fieldname": "sales_partner",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Sales Partner",
+   "options": "Sales Partner",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "customer_visit_reference_cf",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Visit #",
+   "options": "Customer Visit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From Time"
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To Time"
+  }
+ ],
+ "istable": 1,
+ "modified": "2021-07-23 15:40:29.437791",
+ "modified_by": "Administrator",
+ "module": "Nessa",
+ "name": "Customer Visit Plan Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
