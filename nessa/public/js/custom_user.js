@@ -4,10 +4,10 @@
 frappe.ui.form.on("User", {
   refresh: function (frm) {
     frm.page.add_action_item(
-      __("Create Customization"),
+      __("Create Workspace"),
       function () {
         var d = new frappe.ui.Dialog({
-          title: "Copy customizations",
+          title: "Copy Workspace",
           fields: [
             {
               label: __("Copy from User"),
