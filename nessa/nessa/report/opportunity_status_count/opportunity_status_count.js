@@ -16,5 +16,11 @@ frappe.query_reports["Opportunity Status Count"] = {
             "fieldtype": "Date",
             "default": frappe.datetime.get_today()
         },
+        {
+            fieldname: "sales_person",
+            label: __("Sales Person"),
+            fieldtype: "Link",
+            options: "Sales Person",
+          },      
 	]
 };
