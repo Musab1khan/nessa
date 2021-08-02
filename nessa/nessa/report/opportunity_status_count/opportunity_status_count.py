@@ -40,6 +40,8 @@ def get_conditions(filters):
         conditions += ["date(opp.creation) >= %(from_date)s"]
     if filters.get("to_date"):
         conditions += ["date(opp.creation) <= %(to_date)s"]
+    if filters.get("sales_person"):
+        conditions += ["opp.sales_person_cf <= %(sales_person)s"]
 
     return conditions and " and " + " and ".join(conditions) or ""
 
@@ -66,7 +68,6 @@ def get_data(filters):
             user =frappe.db.escape(frappe.session.user)),
         filters,
         as_dict=True,
-        debug=True,
     )
 
     return data
