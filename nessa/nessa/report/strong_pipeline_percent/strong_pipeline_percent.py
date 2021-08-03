@@ -33,7 +33,7 @@ def get_columns(filters):
             "label": _("No of {0}/Total Opportunity (%)").format(
                 filters.get("sales_stage")
             ),
-            "fieldtype": "Int",
+            "fieldtype": "Percent",
             "fieldname": "strong_pipeline_total_percent",
             "width": 400,
         },
@@ -44,9 +44,9 @@ def get_columns(filters):
 def get_conditions(filters):
     conditions = []
     if filters.get("from_date"):
-        conditions += ["date(opp.creation) >= %(from_date)s"]
+        conditions += ["date(opp.transaction_date) >= %(from_date)s"]
     if filters.get("to_date"):
-        conditions += ["date(opp.creation) <= %(to_date)s"]
+        conditions += ["date(opp.transaction_date) <= %(to_date)s"]
     if filters.get("sales_person"):
         conditions += ["opp.sales_person_cf <= %(sales_person)s"]
 
@@ -61,12 +61,17 @@ def get_data(filters):
         count(name) total_opportunity, 
         sum(if(sales_stage = %(sales_stage)s,1,0)) total_sales_stage
     from tabOpportunity opp
-    where opp.sales_person_cf in (
-            select sp.name 
-            from `tabSales Person` sp
-            inner join `tabSales Person` u on u.user_cf = {user}
-            where sp.lft >= u.lft and sp.rgt <= u.rgt order by sp.lft
-    )
+        where 
+        (
+            opp.sales_person_cf in (
+            select for_value 
+            from `tabUser Permission` 
+            where allow = 'Sales Person' and user = {user})
+            or not exists (
+            select 1 
+            from `tabUser Permission` 
+            where allow = 'Sales Person' and user = {user})
+        )
     {conditions}
     """.format(
             conditions=conditions, user=frappe.db.escape(frappe.session.user)
@@ -79,8 +84,8 @@ def get_data(filters):
         if not d.total_opportunity:
             d["strong_pipeline_total_percent"] = 0
         else:
-            d["strong_pipeline_total_percent"] = (
-                100 * cint(d["total_sales_stage"]) / cint(d["total_opportunity"])
+            d["strong_pipeline_total_percent"] = round(
+                100 * cint(d["total_sales_stage"]) / cint(d["total_opportunity"]), 2
             )
 
     return data

@@ -37,9 +37,9 @@ def get_columns(filters):
 def get_conditions(filters):
     conditions = []
     if filters.get("from_date"):
-        conditions += ["date(opp.creation) >= %(from_date)s"]
+        conditions += ["date(opp.transaction_date) >= %(from_date)s"]
     if filters.get("to_date"):
-        conditions += ["date(opp.creation) <= %(to_date)s"]
+        conditions += ["date(opp.transaction_date) <= %(to_date)s"]
     if filters.get("sales_person"):
         conditions += ["opp.sales_person_cf <= %(sales_person)s"]
 
@@ -55,12 +55,17 @@ def get_data(filters):
         sum(if(status='Converted',1,0)) total_won,
         sum(if(status='Lost',1,0)) total_lost 
     from tabOpportunity opp
-    where opp.sales_person_cf in (
-            select sp.name 
-            from `tabSales Person` sp
-            inner join `tabSales Person` u on u.user_cf = {user}
-            where sp.lft >= u.lft and sp.rgt <= u.rgt order by sp.lft
-    )
+        where 
+        (
+            opp.sales_person_cf in (
+            select for_value 
+            from `tabUser Permission` 
+            where allow = 'Sales Person' and user = {user})
+        or not exists (
+            select 1 
+            from `tabUser Permission` 
+            where allow = 'Sales Person' and user = {user})
+        )
     {conditions}
     group by status
     """.format(
