@@ -13,9 +13,10 @@ import json
 
 class CustomerVisit(Document):
     def on_submit(self):
-        if not self.actual_date and self.status in [
-            "Completed"
-        ]:
+        if not self.status in ["Completed", "Cancelled"]:
+            frappe.throw(_("Invalid status {0}. Can submit Visit only when status is Completed or Cancelled.").format(frappe.bold(self.status)))
+
+        if not self.actual_date and self.status in ["Completed"]:
             self.actual_date = frappe.utils.today()
         for d in frappe.get_all(
             "Customer Visit Plan Detail",

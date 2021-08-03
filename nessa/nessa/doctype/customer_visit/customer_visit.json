@@ -15,8 +15,6 @@
   "cb_1",
   "plan_reference",
   "actual_date",
-  "from_time",
-  "to_time",
   "status",
   "sample_required",
   "section_break_11",
@@ -124,18 +122,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "from_time",
-   "fieldtype": "Time",
-   "label": "From Time",
-   "read_only": 1
-  },
-  {
-   "fieldname": "to_time",
-   "fieldtype": "Time",
-   "label": "To Time",
-   "read_only": 1
-  },
-  {
    "fieldname": "sales_person",
    "fieldtype": "Link",
    "label": "Sales Person",
@@ -144,7 +130,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2021-08-02 19:08:45.709699",
+ "modified": "2021-08-03 16:06:27.392321",
  "modified_by": "Administrator",
  "module": "Nessa",
  "name": "Customer Visit",

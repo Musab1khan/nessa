@@ -29,6 +29,7 @@
    "fetch_from": "customer.customer_name",
    "fieldname": "customer_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Customer Name",
    "read_only": 1
   },
@@ -73,13 +74,14 @@
   {
    "fieldname": "sales_person",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Sales Person",
    "options": "Sales Person"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2021-08-02 19:09:21.808205",
+ "modified": "2021-08-03 16:02:30.009585",
  "modified_by": "Administrator",
  "module": "Nessa",
  "name": "Customer Visit Plan Detail",
