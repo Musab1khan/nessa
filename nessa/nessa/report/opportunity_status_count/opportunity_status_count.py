@@ -13,6 +13,12 @@ def execute(filters=None):
 def get_columns(filters):
     columns = [
         {
+            "label": "Sales Person",
+            "fieldtype": "Data",
+            "fieldname": "sales_person_cf",
+            "width": 200,
+        },
+        {
             "label": _("Total Opportunity"),
             "fieldtype": "Int",
             "fieldname": "total_opportunity",
@@ -50,27 +56,35 @@ def get_data(filters):
     conditions = get_conditions(filters)
     data = frappe.db.sql(
         """
-    select 
-        count(name) total_opportunity, 
-        sum(if(status='Converted',1,0)) total_won,
-        sum(if(status='Lost',1,0)) total_lost 
-    from tabOpportunity opp
-        where 
-        (
-            opp.sales_person_cf in (
-            select for_value 
-            from `tabUser Permission` 
-            where allow = 'Sales Person' and user = {user})
-        or not exists (
-            select 1 
-            from `tabUser Permission` 
-            where allow = 'Sales Person' and user = {user})
-        )
-    {conditions}
-    group by status
+    with fn as 
+    (
+        select 
+            opp.sales_person_cf,
+            count(name) total_opportunity, 
+            sum(if(status='Converted',1,0)) total_won,
+            sum(if(status='Lost',1,0)) total_lost 
+        from tabOpportunity opp
+            where 
+            (
+                opp.sales_person_cf in (
+                select for_value 
+                from `tabUser Permission` 
+                where allow = 'Sales Person' and user = {user})
+            or not exists (
+                select 1 
+                from `tabUser Permission` 
+                where allow = 'Sales Person' and user = {user})
+            )
+        {conditions}
+        group by opp.sales_person_cf
+    )
+    select * from fn
+    union all
+    select 'Total', sum(total_opportunity), sum(total_won), sum(total_lost)
+    from fn
     """.format(
-            conditions=conditions,
-            user =frappe.db.escape(frappe.session.user)),
+            conditions=conditions, user=frappe.db.escape(frappe.session.user)
+        ),
         filters,
         as_dict=True,
     )
