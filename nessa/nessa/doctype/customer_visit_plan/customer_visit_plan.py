@@ -19,7 +19,8 @@ class CustomerVisitPlan(Document):
                     "customer_name": d.customer_name,
                     "contact": d.contact,
                     "sales_person": d.sales_person,
-                    "status": "Open"
+                    "status": "Open",
+                    "owner": d.sales_person,
                 }
             )
             visit.insert()
