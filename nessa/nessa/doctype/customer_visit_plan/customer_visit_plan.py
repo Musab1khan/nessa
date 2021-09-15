@@ -11,6 +11,10 @@ class CustomerVisitPlan(Document):
     def on_submit(self):
         for d in self.customer_visit_plan_detail:
             visit = frappe.new_doc("Customer Visit")
+            sales_person_user = frappe.db.get_value(
+                "Sales Person", d.sales_person, "user_cf"
+            )
+
             visit.update(
                 {
                     "planned_date": d.plan_date,
@@ -20,6 +24,8 @@ class CustomerVisitPlan(Document):
                     "contact": d.contact,
                     "sales_person": d.sales_person,
                     "status": "Open",
+                    "owner" : sales_person_user,
+                    # "modified_by" : sales_person_user,
                 }
             )
             visit.insert()
@@ -29,22 +35,6 @@ class CustomerVisitPlan(Document):
                 "customer_visit_reference_cf",
                 visit.name,
             )
-            sales_person_user = frappe.db.get_value(
-                "Sales Person", d.sales_person, "user_cf"
-            )
-            frappe.db.set_value(
-                "Customer Visit",
-                visit.name,
-                "owner",
-                sales_person_user,
-            )
-            frappe.db.set_value(
-                "Customer Visit",
-                visit.name,
-                "modified_by",
-                sales_person_user,
-            )
-
         self.reload()
 
 
