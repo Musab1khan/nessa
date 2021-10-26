@@ -48,7 +48,7 @@ def get_conditions(filters):
     if filters.get("to_date"):
         conditions += ["date(opp.transaction_date) <= %(to_date)s"]
     if filters.get("sales_person"):
-        conditions += ["opp.sales_person_cf <= %(sales_person)s"]
+        conditions += ["opp.sales_person_cf = %(sales_person)s"]
 
     return conditions and " and " + " and ".join(conditions) or ""
 
