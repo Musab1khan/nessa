@@ -26,7 +26,7 @@ def get_columns(filters):
         {
             "label": _("Sales Person"),
             "fieldtype": "Link",
-            "fieldname": "sales_person_cf",
+            "fieldname": "name",
             "options": "Sales Person",
             "width": 280,
         },
@@ -84,52 +84,65 @@ def get_data(filters):
     conditions = get_conditions(filters)
     data = frappe.db.sql(
         """        
-    select t1.* , round(so.base_net_total) orders_received,  visit.mtg_count meetings_done
-    from 
-    (
-	   	select 
-	    COALESCE(opp.sales_person_cf,'') sales_person_cf,
-	    round(sum(case when opp.sales_stage = 'Strong Pipeline' then opp.opportunity_amount else 0 end)) strong_pipeline_value,
-	    round(sum(case when opp.sales_stage = 'Normal Pipeline' then opp.opportunity_amount else 0 end)) normal_pipeline_value,
-	    count(opp.name) inquiries_sent ,
-	    count(DISTINCT q.name) quotation_count
-	    from tabOpportunity opp
-	    left outer join tabQuotation q on q.opportunity = opp.name
-        {conditions}
-	    group by COALESCE(opp.sales_person_cf,'')
-    ) t1
-    left outer join (
-	    select sales_person , count(sales_person) mtg_count 
-	    from `tabCustomer Visit` tcv 
-	    where actual_date is not null
-        and actual_date between %(from_date)s and %(to_date)s
-	    group by sales_person
-    ) visit on visit.sales_person = t1.sales_person_cf
-    left outer join (
-       select tst.sales_person , sum(tso.base_net_total) base_net_total
-	   from `tabSales Order` tso inner join `tabSales Team` tst on tst.parent = tso.name
-       where tso.transaction_date between %(from_date)s and %(to_date)s
-	   group by tst.sales_person
-    ) so on so.sales_person = t1.sales_person_cf
+        select 
+            tsp.name , 
+            coalesce(tq.quotation_count,0) quotation_count, 
+            coalesce(topp.strong_pipeline_value,0) strong_pipeline_value, 
+            coalesce(topp.normal_pipeline_value,0) normal_pipeline_value, 
+            coalesce(topp.inquiries_sent,0) inquiries_sent,
+            coalesce(so.base_net_total,0) orders_received, 
+            coalesce(visit.meetings_done,0) meetings_done
+        from `tabSales Person` tsp 
+        left outer join (
+            select tq.sales_person_cf, count(tq.sales_person_cf) quotation_count
+            from tabQuotation tq
+            where tq.transaction_date between %(from_date)s and %(to_date)s
+            group by tq.sales_person_cf  
+        ) tq on tq.sales_person_cf = tsp.name
+        left outer join (
+            select 
+            opp.sales_person_cf ,
+            round(sum(case when opp.sales_stage = 'Strong Pipeline' 
+                then opp.opportunity_amount else 0 end)) strong_pipeline_value ,
+            round(sum(case when opp.sales_stage = 'Normal Pipeline' 
+                then opp.opportunity_amount else 0 end)) normal_pipeline_value ,
+            count(opp.name) inquiries_sent 
+            from tabOpportunity opp
+            where opp.transaction_date between %(from_date)s and %(to_date)s
+            group by opp.sales_person_cf 
+        ) topp on topp.sales_person_cf = tsp.name
+        left outer join (
+            select sales_person , count(sales_person) meetings_done 
+            from `tabCustomer Visit` tcv 
+            where actual_date is not null
+            and actual_date between %(from_date)s and %(to_date)s
+            group by sales_person
+        ) visit on visit.sales_person = tsp.name
+        left outer join (
+            select tst.sales_person , round(sum(tso.base_net_total)) base_net_total
+            from `tabSales Order` tso inner join `tabSales Team` tst on tst.parent = tso.name
+            where tso.transaction_date between %(from_date)s and %(to_date)s
+            group by tst.sales_person
+        ) so on so.sales_person = tsp.name
+        order by tsp.name
     """.format(
             conditions=conditions, user=frappe.db.escape(frappe.session.user)
         ),
         filters,
         as_dict=True,
+        # debug=True,
     )
 
     if filters.get("sales_person"):
         sales_person = frappe.db.sql(
             """
-            select b.name  from `tabSales Person` a 
-            inner join `tabSales Person` b on b.lft >= a.lft and b.rgt <= a.rgt 
-            where a.name = %s;        
+            select b.name  from `tabSales Person` a
+            inner join `tabSales Person` b on b.lft >= a.lft and b.rgt <= a.rgt
+            where a.name = %s;
         """,
             (filters.get("sales_person")),
             as_list=True,
         )
-        data = [
-            x for x in data if x.get("sales_person_cf") in [a[0] for a in sales_person]
-        ]
+        data = [x for x in data if x.get("name") in [a[0] for a in sales_person]]
 
     return data
