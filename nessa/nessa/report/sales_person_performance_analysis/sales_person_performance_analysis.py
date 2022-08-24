@@ -124,6 +124,7 @@ def get_data(filters):
             where tso.transaction_date between %(from_date)s and %(to_date)s
             group by tst.sales_person
         ) so on so.sales_person = tsp.name
+        where tsp.enabled = 1
         order by tsp.name
     """.format(
             conditions=conditions, user=frappe.db.escape(frappe.session.user)
