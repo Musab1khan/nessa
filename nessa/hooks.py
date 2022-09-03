@@ -93,7 +93,10 @@ doctype_js = {
 # ---------------
 # Hook on document methods and events
 
-doc_events = {"Lead": {"validate": ["nessa.doc_events.validate_lead"]}}
+doc_events = {
+    "Lead": {"validate": ["nessa.doc_events.validate_lead"]},
+    "BOM": {"validate": "nessa.doc_events.validate_bom"},
+}
 
 # Scheduled Tasks
 # ---------------

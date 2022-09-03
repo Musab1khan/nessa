@@ -49,10 +49,16 @@ def get_columns(filters):
             "width": 175,
         },
         {
-            "label": _("No of Meetings Done"),
+            "label": _("No of Customer Visits Done"),
             "fieldtype": "Int",
             "fieldname": "meetings_done",
-            "width": 175,
+            "width": 200,
+        },
+        {
+            "label": _("Total Meetings"),
+            "fieldtype": "Int",
+            "fieldname": "total_meetings",
+            "width": 155,
         },
         {
             "label": _("No of inquiries handled/<br>Quote sent"),
@@ -91,12 +97,14 @@ def get_data(filters):
             coalesce(topp.normal_pipeline_value,0) normal_pipeline_value, 
             coalesce(topp.inquiries_sent,0) inquiries_sent,
             coalesce(so.base_net_total,0) orders_received, 
-            coalesce(visit.meetings_done,0) meetings_done
+            coalesce(visit.meetings_done,0) meetings_done,
+            coalesce(evt.ct,0) total_meetings
         from `tabSales Person` tsp 
         left outer join (
             select tq.sales_person_cf, count(tq.sales_person_cf) quotation_count
             from tabQuotation tq
             where tq.transaction_date between %(from_date)s and %(to_date)s
+            and tq.docstatus = 1
             group by tq.sales_person_cf  
         ) tq on tq.sales_person_cf = tsp.name
         left outer join (
@@ -122,8 +130,16 @@ def get_data(filters):
             select tst.sales_person , round(sum(tso.base_net_total)) base_net_total
             from `tabSales Order` tso inner join `tabSales Team` tst on tst.parent = tso.name
             where tso.transaction_date between %(from_date)s and %(to_date)s
+            and tso.docstatus = 1
             group by tst.sales_person
         ) so on so.sales_person = tsp.name
+        left outer join (
+	        select tsp.sales_person_name , count(tsp.sales_person_name) ct 
+	        from tabEvent te 
+	        inner join `tabSales Person` tsp on tsp.user_cf = te.owner
+	        where te.starts_on between %(from_date)s and %(to_date)s
+	        group by tsp.sales_person_name
+	    ) evt on evt.sales_person_name = tsp.name        
         where tsp.enabled = 1
         order by tsp.name
     """.format(

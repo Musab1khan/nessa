@@ -1,5 +1,5 @@
 {
- "add_total_row": 0,
+ "add_total_row": 1,
  "columns": [],
  "creation": "2021-10-26 13:50:25.317074",
  "disable_prepared_report": 0,
@@ -10,7 +10,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letter_head": "Standard",
- "modified": "2021-10-26 13:53:48.245530",
+ "modified": "2022-09-03 19:39:58.218371",
  "modified_by": "Administrator",
  "module": "Nessa",
  "name": "Sales Person Performance Analysis",
