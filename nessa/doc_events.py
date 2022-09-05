@@ -13,25 +13,25 @@ def validate_lead(doc, method):
             doc.sales_person_cf = d.name
 
 
-def validate_bom(doc, method):
+# def validate_bom(doc, method):
 
-    item_details = {}
+#     item_details = {}
 
-    for d in frappe.db.sql(
-        """
-    select tbi.item_code , 
-    GROUP_CONCAT(CONCAT(tim.manufacturer,'\t,\t',tim.manufacturer_part_no) SEPARATOR '\n') details
-    from `tabBOM Item` tbi 
-    inner join `tabItem Manufacturer` tim on tim.item_code = tbi.item_code 
-    where tbi.parent = %s
-    group by tbi.item_code 
-    """,
-        (doc.name,),
-        as_dict=True,
-    ):
-        item_details[d.item_code] = d.details
+#     for d in frappe.db.sql(
+#         """
+#     select tbi.item_code ,
+#     GROUP_CONCAT(CONCAT(tim.manufacturer,'\t,\t',tim.manufacturer_part_no) SEPARATOR '\n') details
+#     from `tabBOM Item` tbi
+#     inner join `tabItem Manufacturer` tim on tim.item_code = tbi.item_code
+#     where tbi.parent = %s
+#     group by tbi.item_code
+#     """,
+#         (doc.name,),
+#         as_dict=True,
+#     ):
+#         item_details[d.item_code] = d.details
 
-    if item_details:
-        for d in doc.items:
-            if not d.item_manufacturer_detail_cf:
-                d.item_manufacturer_detail_cf = item_details.get(d.item_code)
+#     if item_details:
+#         for d in doc.items:
+#             if not d.item_manufacturer_detail_cf:
+#                 d.item_manufacturer_detail_cf = item_details.get(d.item_code)
