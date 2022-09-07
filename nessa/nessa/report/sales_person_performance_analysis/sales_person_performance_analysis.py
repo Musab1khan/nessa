@@ -55,7 +55,7 @@ def get_columns(filters):
             "width": 200,
         },
         {
-            "label": _("Total Meetings"),
+            "label": _("No Of Meetings"),
             "fieldtype": "Int",
             "fieldname": "total_meetings",
             "width": 155,
