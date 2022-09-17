@@ -16,7 +16,6 @@ frappe.query_reports["Sales Person Performance Analysis"] = {
       fieldtype: "Date",
       default: frappe.datetime.get_today(),
     },
-
     {
       fieldname: "timespan",
       label: __("Opportunity Creation Date in "),
@@ -38,6 +37,12 @@ frappe.query_reports["Sales Person Performance Analysis"] = {
       label: __("Sales Person"),
       fieldtype: "Link",
       options: "Sales Person",
+    },
+    {
+      fieldname: "ignore_duration_for_opportunity",
+      label: __("Ignore Duration for Opportunity"),
+      fieldtype: "Check",
+      default: 1
     },
   ],
 };
