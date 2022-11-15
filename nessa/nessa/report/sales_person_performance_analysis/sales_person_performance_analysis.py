@@ -72,8 +72,9 @@ def get_data(filters):
             group by tst.sales_person
         ) so on so.sales_person = tsp.name
         left outer join (
-            select tst.sales_person , round(sum(tsi.base_net_total)) base_net_total
-            from `tabSales Invoice` tsi inner join `tabSales Team` tst on tst.parent = tsi.name
+            select tst.sales_person , round(sum(tst.allocated_amount)) base_net_total
+            from `tabSales Invoice` tsi 
+            inner join `tabSales Team` tst on tst.parent = tsi.name
             where tsi.posting_date between %(from_date)s and %(to_date)s
             and tsi.docstatus = 1
             group by tst.sales_person
