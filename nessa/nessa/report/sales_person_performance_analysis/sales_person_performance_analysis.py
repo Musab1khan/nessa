@@ -65,8 +65,9 @@ def get_data(filters):
             group by sales_person
         ) visit on visit.sales_person = tsp.name
         left outer join (
-            select tst.sales_person , round(sum(tso.base_net_total)) base_net_total
-            from `tabSales Order` tso inner join `tabSales Team` tst on tst.parent = tso.name
+            select tst.sales_person , round(sum(tst.allocated_amount)) base_net_total
+            from `tabSales Order` tso 
+            inner join `tabSales Team` tst on tst.parent = tso.name
             where tso.transaction_date between %(from_date)s and %(to_date)s
             and tso.docstatus = 1
             group by tst.sales_person
