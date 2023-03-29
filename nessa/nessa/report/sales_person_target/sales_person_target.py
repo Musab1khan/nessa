@@ -91,13 +91,9 @@ def execute(filters=None):
             where_conditions=get_sales_person_conditions(filters),
         ),
         filters,
-        as_dict=True,
-        debug=True,
-    )
+        as_dict=True)
 
 	if len(sales_person_list)>0:
-
-		print('sales_person_list',sales_person_list)
 
 		valid_sales_persons = [d.name for d in sales_person_list]
 		where_fiscal_filter=''
@@ -114,9 +110,7 @@ def execute(filters=None):
 	order by st.sales_person,si.posting_date
 		""".format(where_fiscal_filter=where_fiscal_filter,valid_sales_person=",".join(["%s"]*len(valid_sales_persons))),
 		tuple(valid_sales_persons),
-		as_dict=True,
-		debug=True,)
-		print('allocated_amount',allocated_amount_list)
+		as_dict=True)
 
 		for sales_person in sales_person_list:
 			found_sales_person=False
@@ -139,7 +133,6 @@ def execute(filters=None):
 					amount_eligible_for_comission=0-flt(sales_person.per_month_target_amount,2)
 					commission_amount=flt(((amount_eligible_for_comission/100)*(flt(sales_person.commission_rate))),2)
 					data.append([sales_person.name,list_month,flt(sales_person.per_month_target_amount,2),0,amount_eligible_for_comission,flt(sales_person.commission_rate,2),commission_amount,sales_person.performance_target_cf])					
-				print('sales_person11',sales_person)							
 
 	
 	message="for the selected Fiscal Year, Sales Person will show up only if Sales Person->Sales Person Targets(child table)->Fiscal Year value is defined."	
@@ -156,5 +149,4 @@ def get_sales_person_conditions(filters):
 		fiscal_year = get_fiscal_year(fiscal_year=filters.get('fiscal_year'), as_dict=True)
 		where_clause.append("td.fiscal_year=%(fiscal_year)s")	
 	condition_for_sp=" where " + " and ".join(where_clause) if where_clause else ""
-	print('condition_for_sp',condition_for_sp)
 	return 	condition_for_sp
