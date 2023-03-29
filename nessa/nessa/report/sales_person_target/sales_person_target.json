@@ -13,11 +13,11 @@
  "modified": "2023-03-22 13:21:25.545816",
  "modified_by": "Administrator",
  "module": "Nessa",
- "name": "Sales person Target",
+ "name": "Sales Person Target",
  "owner": "Administrator",
  "prepared_report": 0,
  "ref_doctype": "Sales Person",
- "report_name": "Sales person Target",
+ "report_name": "Sales Person Target",
  "report_type": "Script Report",
  "roles": [
   {

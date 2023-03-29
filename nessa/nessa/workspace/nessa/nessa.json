@@ -91,9 +91,18 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Person Target",
+   "link_to": "Sales Person Target",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2022-08-21 09:01:55.470953",
+ "modified": "2023-03-28 11:48:48.481049",
  "modified_by": "Administrator",
  "module": "Nessa",
  "name": "Nessa",

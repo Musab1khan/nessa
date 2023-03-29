@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Sales person Target"] = {
+frappe.query_reports["Sales Person Target"] = {
 	"filters": [
 		{
 			"fieldname" : "sales_person_name",
@@ -16,7 +16,8 @@ frappe.query_reports["Sales person Target"] = {
 			label: "Fiscal Year",
 			fieldtype: "Link",
 			options: "Fiscal Year",
-			// default: frappe.sys_defaults.fiscal_year,
+			reqd: 1,
+			default: frappe.sys_defaults.fiscal_year,
 			
 		},
 

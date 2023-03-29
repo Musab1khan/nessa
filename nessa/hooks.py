@@ -144,7 +144,7 @@ doc_events = {
 
 # User Data Protection
 # --------------------
-
+# after_migrate = "xtc.install.after_install"
 user_data_fields = [
     {
         "doctype": "{doctype_1}",
