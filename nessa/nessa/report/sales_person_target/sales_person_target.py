@@ -111,7 +111,6 @@ def execute(filters=None):
 		""".format(where_fiscal_filter=where_fiscal_filter,valid_sales_person=",".join(["%s"]*len(valid_sales_persons))),
 		tuple(valid_sales_persons),
 		as_dict=True)
-
 		for sales_person in sales_person_list:
 			found_sales_person=False
 			for list_month in months:
@@ -128,11 +127,11 @@ def execute(filters=None):
 					amount_eligible_for_comission=0-flt(sales_person.per_month_target_amount,2)
 					commission_amount=flt(((amount_eligible_for_comission/100)*(flt(sales_person.commission_rate))),2)
 					data.append([sales_person.name,list_month,flt(sales_person.per_month_target_amount,2),0,amount_eligible_for_comission,flt(sales_person.commission_rate,2),commission_amount,sales_person.performance_target_cf])					
-			if found_sales_person==False:
-				for list_month in months:
-					amount_eligible_for_comission=0-flt(sales_person.per_month_target_amount,2)
-					commission_amount=flt(((amount_eligible_for_comission/100)*(flt(sales_person.commission_rate))),2)
-					data.append([sales_person.name,list_month,flt(sales_person.per_month_target_amount,2),0,amount_eligible_for_comission,flt(sales_person.commission_rate,2),commission_amount,sales_person.performance_target_cf])					
+			# if found_sales_person==False:
+			# 	for list_month in months:
+			# 		amount_eligible_for_comission=0-flt(sales_person.per_month_target_amount,2)
+			# 		commission_amount=flt(((amount_eligible_for_comission/100)*(flt(sales_person.commission_rate))),2)
+			# 		data.append([sales_person.name,list_month,flt(sales_person.per_month_target_amount,2),0,amount_eligible_for_comission,flt(sales_person.commission_rate,2),commission_amount,sales_person.performance_target_cf])					
 
 	
 	message="for the selected Fiscal Year, Sales Person will show up only if Sales Person->Sales Person Targets(child table)->Fiscal Year value is defined."	
