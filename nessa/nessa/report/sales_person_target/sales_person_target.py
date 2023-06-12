@@ -123,6 +123,7 @@ def execute(filters=None):
 							commission_amount=flt(((amount_eligible_for_comission/100)*(flt(sales_person.commission_rate))),2)
 							data.append([allocated_amount.sales_person,allocated_amount.si_month,flt(sales_person.per_month_target_amount,2),allocated_amount.achieved_amount,
 		    					amount_eligible_for_comission,flt(sales_person.commission_rate,2),commission_amount,sales_person.performance_target_cf])
+				# no data for SP
 				if found_month_for_sales_person==False:
 					amount_eligible_for_comission=0-flt(sales_person.per_month_target_amount,2)
 					commission_amount=flt(((amount_eligible_for_comission/100)*(flt(sales_person.commission_rate))),2)
